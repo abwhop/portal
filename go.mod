@@ -1,7 +1,6 @@
-module  gitlab.com/kirill_ussr/portal_sync
+module gitlab.com/kirill_ussr/portal_sync
 
 go 1.21.2
-
 
 require (
 	github.com/antchfx/htmlquery v1.3.1
