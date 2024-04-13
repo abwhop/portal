@@ -2,7 +2,7 @@ package services
 
 import (
 	"encoding/json"
-	"gitlab.com/kirill_ussr/portal_sync/models"
+	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
 )
 
 func ConvertFile(fileAPI *models.FileAPI) (*models.FileDB, error) {

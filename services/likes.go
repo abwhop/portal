@@ -1,7 +1,7 @@
 package services
 
 import (
-	"gitlab.com/kirill_ussr/portal_sync/models"
+	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
 )
 
 func ConvertLikes(likesAPI *models.LikesAPI) (*models.LikesDB, error) {

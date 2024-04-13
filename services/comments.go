@@ -2,7 +2,7 @@ package services
 
 import (
 	"encoding/json"
-	"gitlab.com/kirill_ussr/portal_sync/models"
+	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
 )
 
 func ConvertComment(commentAPI *models.CommentAPI) (*models.CommentDB, error) {

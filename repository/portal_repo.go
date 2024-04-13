@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"gitlab.com/kirill_ussr/portal_sync/models"
+	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"os"

@@ -3,10 +3,10 @@ package services
 import (
 	"context"
 	"fmt"
-	"gitlab.com/kirill_ussr/portal_sync/gql"
-	"gitlab.com/kirill_ussr/portal_sync/models"
-	"gitlab.com/kirill_ussr/portal_sync/query"
-	"gitlab.com/kirill_ussr/portal_sync/repository"
+	"git.nlmk.com/mcs/micro/portal/portal_sync/gql"
+	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
+	"git.nlmk.com/mcs/micro/portal/portal_sync/query"
+	"git.nlmk.com/mcs/micro/portal/portal_sync/repository"
 	"time"
 )
 

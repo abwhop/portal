@@ -1,4 +1,4 @@
-module gitlab.com/kirill_ussr/portal_sync
+module git.nlmk.com/mcs/micro/portal/portal_sync
 
 go 1.21.2
 

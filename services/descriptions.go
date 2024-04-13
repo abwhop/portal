@@ -2,9 +2,9 @@ package services
 
 import (
 	"encoding/json"
+	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
 	"github.com/antchfx/htmlquery"
 	"github.com/lib/pq"
-	"gitlab.com/kirill_ussr/portal_sync/models"
 	"regexp"
 	"strconv"
 	"strings"
