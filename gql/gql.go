@@ -1,0 +1,67 @@
+package gql
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"io"
+	"net/http"
+	"portal_sync/models"
+	"time"
+)
+
+type Gql struct {
+	config     *models.PortalConfig
+	httpClient *http.Client
+}
+
+type authedTransport struct {
+	username string
+	password string
+	wrapped  http.RoundTripper
+}
+
+func (t *authedTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req.SetBasicAuth(t.username, t.password)
+	return t.wrapped.RoundTrip(req)
+}
+
+func NewGql(config *models.PortalConfig) *Gql {
+	return &Gql{
+		config: config,
+		httpClient: &http.Client{
+			Transport: &authedTransport{
+				username: config.User,
+				password: config.Password,
+				wrapped:  http.DefaultTransport,
+			},
+		},
+	}
+}
+
+func (g *Gql) Query(ctx context.Context, query string, model interface{}) error {
+	//fmt.Println(query)
+	req, err := http.NewRequest("POST", g.config.Server+`/graphql/`, bytes.NewBuffer([]byte(query)))
+	if err != nil {
+		return err
+	}
+	ctx, cancel := context.WithTimeout(req.Context(), time.Duration(g.config.Timeout)*time.Millisecond)
+	defer cancel()
+	req = req.WithContext(ctx)
+	resp, err := g.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	var errorRespond models.GQLErrorRespond
+
+	b, err := io.ReadAll(resp.Body)
+	if err := json.Unmarshal(b, &errorRespond); err == nil && len(errorRespond.Errors) > 0 {
+		return errors.New(errorRespond.Errors[0].Message)
+	} else if err := json.Unmarshal(b, &model); err != nil {
+		return err
+	}
+	return nil
+}
