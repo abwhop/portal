@@ -1,10 +1,10 @@
 package repository
 
 import (
+	"gitlab.com/kirill_ussr/portal_sync/models"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"os"
-	"portal_sync/models"
 )
 
 type Repository struct {

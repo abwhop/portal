@@ -5,9 +5,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"gitlab.com/kirill_ussr/portal_sync/models"
 	"io"
 	"net/http"
-	"portal_sync/models"
 	"time"
 )
 

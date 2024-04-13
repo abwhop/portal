@@ -1,6 +1,6 @@
 package services
 
-import "portal_sync/models"
+import "gitlab.com/kirill_ussr/portal_sync/models"
 
 type Service struct {
 	config *models.Config

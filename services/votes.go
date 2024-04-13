@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"portal_sync/gql"
-	"portal_sync/models"
-	"portal_sync/query"
-	"portal_sync/repository"
+	"gitlab.com/kirill_ussr/portal_sync/gql"
+	"gitlab.com/kirill_ussr/portal_sync/models"
+	"gitlab.com/kirill_ussr/portal_sync/query"
+	"gitlab.com/kirill_ussr/portal_sync/repository"
 	"time"
 )
 

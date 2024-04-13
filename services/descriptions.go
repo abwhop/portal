@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/antchfx/htmlquery"
 	"github.com/lib/pq"
-	"portal_sync/models"
+	"gitlab.com/kirill_ussr/portal_sync/models"
 	"regexp"
 	"strconv"
 	"strings"
