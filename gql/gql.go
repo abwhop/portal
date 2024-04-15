@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
+	"github.com/abwhop/portal_sync/models"
 	"io"
 	"net/http"
 	"time"

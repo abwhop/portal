@@ -1,4 +1,4 @@
-module git.nlmk.com/mcs/micro/portal/portal_sync
+module github.com/abwhop/portal_sync
 
 go 1.21.2
 

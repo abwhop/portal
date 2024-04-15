@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
+	"github.com/abwhop/portal_sync/models"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"os"

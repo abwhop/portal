@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"git.nlmk.com/mcs/micro/portal/portal_sync/gql"
-	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
-	"git.nlmk.com/mcs/micro/portal/portal_sync/query"
-	"git.nlmk.com/mcs/micro/portal/portal_sync/repository"
+	"github.com/abwhop/portal_sync/gql"
+	"github.com/abwhop/portal_sync/models"
+	"github.com/abwhop/portal_sync/query"
+	"github.com/abwhop/portal_sync/repository"
 	"time"
 )
 

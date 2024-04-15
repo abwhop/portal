@@ -2,7 +2,7 @@ package services
 
 import (
 	"encoding/json"
-	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
+	"github.com/abwhop/portal_sync/models"
 	"github.com/antchfx/htmlquery"
 	"github.com/lib/pq"
 	"regexp"

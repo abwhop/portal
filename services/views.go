@@ -1,7 +1,7 @@
 package services
 
 import (
-	"git.nlmk.com/mcs/micro/portal/portal_sync/models"
+	"github.com/abwhop/portal_sync/models"
 )
 
 func ConvertViews(viewsAPI *models.ViewsAPI) (*models.ViewsDB, error) {
