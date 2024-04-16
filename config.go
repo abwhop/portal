@@ -1,4 +1,4 @@
-package services
+package portal_sync
 
 type Config struct {
 	Database *DatabaseConfig

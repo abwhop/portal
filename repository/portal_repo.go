@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/abwhop/portal_models/models"
-	"github.com/abwhop/portal_sync/services"
+	"github.com/abwhop/portal_sync"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"os"
@@ -12,7 +12,7 @@ type Repository struct {
 	db *gorm.DB
 }
 
-func NewRepository(config *services.DatabaseConfig) *Repository {
+func NewRepository(config *portal_sync.DatabaseConfig) *Repository {
 	var db *gorm.DB
 	sqlDebugFlag := os.Getenv("SQL_DEBUG")
 	if sqlDebugFlag == "true" {
