@@ -1,14 +1,10 @@
 package services
 
-import (
-	"github.com/abwhop/portal_models/models"
-)
-
 type Service struct {
-	config *models.Config
+	config *Config
 }
 
-func NewService(config *models.Config) *Service {
+func NewService(config *Config) *Service {
 	return &Service{
 		config: config,
 	}
