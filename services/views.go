@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/abwhop/portal_sync/models"
+	"github.com/abwhop/portal_models/models"
 )
 
 func ConvertViews(viewsAPI *models.ViewsAPI) (*models.ViewsDB, error) {

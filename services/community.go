@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 	"fmt"
+	"github.com/abwhop/portal_models/models"
 	"github.com/abwhop/portal_sync/gql"
-	"github.com/abwhop/portal_sync/models"
 	"github.com/abwhop/portal_sync/query"
 	"github.com/abwhop/portal_sync/repository"
 	"time"

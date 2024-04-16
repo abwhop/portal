@@ -2,7 +2,7 @@ package services
 
 import (
 	"encoding/json"
-	"github.com/abwhop/portal_sync/models"
+	"github.com/abwhop/portal_models/models"
 )
 
 func ConvertFile(fileAPI *models.FileAPI) (*models.FileDB, error) {

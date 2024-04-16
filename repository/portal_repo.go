@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/abwhop/portal_sync/models"
+	"github.com/abwhop/portal_models/models"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"os"

@@ -2,7 +2,7 @@ package services
 
 import (
 	"encoding/json"
-	"github.com/abwhop/portal_sync/models"
+	"github.com/abwhop/portal_models/models"
 )
 
 func ConvertComment(commentAPI *models.CommentAPI) (*models.CommentDB, error) {

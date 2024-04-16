@@ -1,6 +1,8 @@
 package services
 
-import "github.com/abwhop/portal_sync/models"
+import (
+	"github.com/abwhop/portal_models/models"
+)
 
 type Service struct {
 	config *models.Config

@@ -1,6 +1,6 @@
-package models
+package gql
 
-type GQLErrorRespond struct {
+type ErrorRespond struct {
 	Errors []struct {
 		Message   string `json:"message"`
 		Category  string `json:"category"`

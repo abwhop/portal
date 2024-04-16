@@ -12,7 +12,7 @@ import (
 )
 
 type Gql struct {
-	config     *models.PortalConfig
+	config     *models_old.PortalConfig
 	httpClient *http.Client
 }
 
@@ -27,7 +27,7 @@ func (t *authedTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	return t.wrapped.RoundTrip(req)
 }
 
-func NewGql(config *models.PortalConfig) *Gql {
+func NewGql(config *models_old.PortalConfig) *Gql {
 	return &Gql{
 		config: config,
 		httpClient: &http.Client{
@@ -55,7 +55,7 @@ func (g *Gql) Query(ctx context.Context, query string, model interface{}) error 
 	}
 	defer resp.Body.Close()
 
-	var errorRespond models.GQLErrorRespond
+	var errorRespond ErrorRespond
 
 	b, err := io.ReadAll(resp.Body)
 	if err := json.Unmarshal(b, &errorRespond); err == nil && len(errorRespond.Errors) > 0 {
