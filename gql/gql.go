@@ -5,14 +5,14 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/abwhop/portal_sync/models"
+	"github.com/abwhop/portal_sync/services"
 	"io"
 	"net/http"
 	"time"
 )
 
 type Gql struct {
-	config     *models_old.PortalConfig
+	config     *services.PortalConfig
 	httpClient *http.Client
 }
 
@@ -27,7 +27,7 @@ func (t *authedTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	return t.wrapped.RoundTrip(req)
 }
 
-func NewGql(config *models_old.PortalConfig) *Gql {
+func NewGql(config *services.PortalConfig) *Gql {
 	return &Gql{
 		config: config,
 		httpClient: &http.Client{
