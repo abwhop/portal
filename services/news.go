@@ -83,10 +83,10 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsBreafe, error) {
 		repostBlogPostId = newsAPI.RepostBlog.BlogId
 	}
 
-	/*repostNewsId := 0
-	if newsAPI.RepostNews != nil {
-		repostNewsId = newsAPI.RepostNews.Id
-	}*/
+	tags, err := convertNewsTags(newsAPI.Tags)
+	if err != nil {
+		tags = nil
+	}
 
 	return &models.NewsBreafe{
 		Id:                 newsAPI.Id,
@@ -117,5 +117,14 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsBreafe, error) {
 		Files:           filesDB,
 		VoteNum:         pq.Int64Array{},
 		FormId:          formIds,
+		Tags:            tags,
 	}, nil
+}
+
+func convertNewsTags(tags []*models.Tag) ([]string, error) {
+	var tagsDB []string
+	for _, tag := range tags {
+		tagsDB = append(tagsDB, tag.Name)
+	}
+	return tagsDB, nil
 }
