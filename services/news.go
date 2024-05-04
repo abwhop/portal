@@ -37,8 +37,8 @@ func (srv *Service) LoadNews(limit int, page int) (int, error) {
 	fmt.Println("Data saved:", time.Since(startSaveTime))
 	return len(respondModel.Data.News), nil
 }
-func ConvertNews(newsAPI []*models.NewsAPI) ([]*models.NewsBreafe, error) {
-	var newsDB []*models.NewsBreafe
+func ConvertNews(newsAPI []*models.NewsAPI) ([]*models.NewsDB, error) {
+	var newsDB []*models.NewsDB
 	for _, news := range newsAPI {
 		newsOneDB, err := ConvertOneNews(news)
 		if err != nil {
@@ -49,7 +49,7 @@ func ConvertNews(newsAPI []*models.NewsAPI) ([]*models.NewsBreafe, error) {
 	return newsDB, nil
 }
 
-func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsBreafe, error) {
+func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsDB, error) {
 
 	authorDB, err := ConvertUser(newsAPI.Author)
 	if err != nil {
@@ -80,7 +80,7 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsBreafe, error) {
 
 	repostBlogPostId := 0
 	if newsAPI.RepostBlog != nil {
-		repostBlogPostId = newsAPI.RepostBlog.BlogId
+		repostBlogPostId = newsAPI.RepostBlog.Id
 	}
 
 	tags, err := convertNewsTags(newsAPI.Tags)
@@ -88,7 +88,7 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsBreafe, error) {
 		tags = nil
 	}
 
-	return &models.NewsBreafe{
+	return &models.NewsDB{
 		Id:                 newsAPI.Id,
 		Type:               "news",
 		PublishDate:        newsAPI.PublishDate * 1000,
