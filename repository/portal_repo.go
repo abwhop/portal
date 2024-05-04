@@ -31,7 +31,7 @@ func (b *Repository) SetBlogs(resModel []*models.BlogDB) error {
 func (b *Repository) SetBlogPosts(resModel []*models.PostDB) error {
 	return b.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(&resModel).Error
 }
-func (b *Repository) SetNews(resModel []*models.NewsBreafe) error {
+func (b *Repository) SetNews(resModel []*models.NewsDB) error {
 	return b.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(&resModel).Error
 }
 
