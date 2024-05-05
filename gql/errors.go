@@ -12,7 +12,7 @@ type ErrorRespondGQL struct {
 }
 
 type ErrorRespond struct {
-	Error struct {
+	Error *struct {
 		Message string `json:"message"`
 	} `json:"error"`
 }
