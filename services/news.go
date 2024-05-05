@@ -11,21 +11,24 @@ import (
 	"time"
 )
 
-func (srv *Service) LoadNews(limit int, page int) (int, error) {
+func (srv *Service) LoadNews(limit int, page int, repo *repository.Repository) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second)
 	defer cancel()
-	repo := repository.NewRepository(srv.config.Database)
 	var err error
-	loafStart := time.Now()
+	loadStart := time.Now()
 	var respondModel *models.NewsGQLRespond
-
 	if err := gql.NewGql(srv.config.Portal).Query(ctx, fmt.Sprintf(query.NewsQuery, limit, page), &respondModel); err != nil {
 		fmt.Println(err)
 		return 0, err
 	}
-	fmt.Println("Data loaded:", time.Since(loafStart))
-	startSaveTime := time.Now()
+	loadedItemCount := len(respondModel.Data.News)
+	fmt.Printf(`Data loaded: count: %s time: %d\n`, time.Since(loadStart), loadedItemCount)
 
+	if loadedItemCount == 0 {
+		return 0, nil
+	}
+
+	startSaveTime := time.Now()
 	newsDB, err := ConvertNews(respondModel.Data.News)
 	if err != nil {
 		return 0, err
@@ -34,8 +37,8 @@ func (srv *Service) LoadNews(limit int, page int) (int, error) {
 	if err := repo.SetNews(newsDB); err != nil {
 		return 0, err
 	}
-	fmt.Println("Data saved:", time.Since(startSaveTime))
-	return len(respondModel.Data.News), nil
+	fmt.Printf(`Data saved: time: %s\n`, time.Since(startSaveTime))
+	return loadedItemCount, nil
 }
 func ConvertNews(newsAPI []*models.NewsAPI) ([]*models.NewsDB, error) {
 	var newsDB []*models.NewsDB
