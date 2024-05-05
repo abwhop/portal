@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/abwhop/portal_sync"
 	"io"
 	"net/http"
@@ -42,7 +41,7 @@ func NewGql(config *portal_sync.PortalConfig) *Gql {
 }
 
 func (g *Gql) Query(ctx context.Context, query string, model interface{}) error {
-	fmt.Println(query)
+	//fmt.Println(query)
 	req, err := http.NewRequest("POST", g.config.Server+`/graphql/`, bytes.NewBuffer([]byte(query)))
 	if err != nil {
 		return err
@@ -60,7 +59,7 @@ func (g *Gql) Query(ctx context.Context, query string, model interface{}) error 
 	var errorRespond ErrorRespond
 
 	b, err := io.ReadAll(resp.Body)
-	fmt.Println(string(b))
+	//fmt.Println(string(b))
 	if err := json.Unmarshal(b, &errorRespond); err == nil {
 		return errors.New(errorRespond.Error.Message)
 	} else if err := json.Unmarshal(b, &errorRespondGQL); err == nil && len(errorRespondGQL.Errors) > 0 {
