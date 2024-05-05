@@ -13,13 +13,19 @@ import (
 func (srv *Service) LoadBlogs(limit int, page int) (int, error) {
 	ctx := context.Background()
 	var err error
-	loafStart := time.Now()
+	loadStart := time.Now()
 	var respondModel models.BlogGQLRespond
 	if err := gql.NewGql(srv.config.Portal).Query(ctx, fmt.Sprintf(query.BlogQuery, limit, page), &respondModel); err != nil {
 		fmt.Println(err)
 		return 0, err
 	}
-	fmt.Println("Data loaded:", time.Since(loafStart))
+
+	loadedItemCount := len(respondModel.Data.Blogs)
+	fmt.Printf("Data loaded: count: %d time: %s\n", loadedItemCount, time.Since(loadStart))
+
+	if loadedItemCount == 0 {
+		return 0, nil
+	}
 	startSaveTime := time.Now()
 
 	blogDB, err := ConvertBlogs(respondModel.Data.Blogs)
@@ -31,7 +37,7 @@ func (srv *Service) LoadBlogs(limit int, page int) (int, error) {
 		return 0, err
 	}
 	fmt.Println("Data saved:", time.Since(startSaveTime))
-	return len(respondModel.Data.Blogs), nil
+	return loadedItemCount, nil
 }
 
 func ConvertBlogPosts(postsAPI []*models.PostAPI) ([]*models.PostDB, error) {
