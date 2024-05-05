@@ -56,12 +56,15 @@ func (g *Gql) Query(ctx context.Context, query string, model interface{}) error 
 	}
 	defer resp.Body.Close()
 
+	var errorRespondGQL ErrorRespondGQL
 	var errorRespond ErrorRespond
 
 	b, err := io.ReadAll(resp.Body)
 	fmt.Println(string(b))
-	if err := json.Unmarshal(b, &errorRespond); err == nil && len(errorRespond.Errors) > 0 {
-		return errors.New(errorRespond.Errors[0].Message)
+	if err := json.Unmarshal(b, &errorRespond); err == nil {
+		return errors.New(errorRespond.Error.Message)
+	} else if err := json.Unmarshal(b, &errorRespondGQL); err == nil && len(errorRespondGQL.Errors) > 0 {
+		return errors.New(errorRespondGQL.Errors[0].Message)
 	} else if err := json.Unmarshal(b, &model); err != nil {
 		return err
 	}

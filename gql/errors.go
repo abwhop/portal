@@ -1,6 +1,6 @@
 package gql
 
-type ErrorRespond struct {
+type ErrorRespondGQL struct {
 	Errors []struct {
 		Message   string `json:"message"`
 		Category  string `json:"category"`
@@ -9,4 +9,10 @@ type ErrorRespond struct {
 			Column int `json:"column"`
 		} `json:"locations"`
 	} `json:"errors"`
+}
+
+type ErrorRespond struct {
+	Error struct {
+		Message string `json:"message"`
+	} `json:"error"`
 }
