@@ -60,7 +60,7 @@ func (g *Gql) Query(ctx context.Context, query string, model interface{}) error 
 	var errorRespond *ErrorRespond
 
 	b, err := io.ReadAll(resp.Body)
-	fmt.Println(string(b))
+	//fmt.Println(string(b))
 	if err := json.Unmarshal(b, &errorRespond); err == nil && errorRespond.Error != nil {
 		fmt.Println("1")
 		return errors.New(errorRespond.Error.Message)
