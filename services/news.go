@@ -22,7 +22,7 @@ func (srv *Service) LoadNews(limit int, page int, repo *repository.Repository) (
 		return 0, err
 	}
 	loadedItemCount := len(respondModel.Data.News)
-	fmt.Printf(`Data loaded: count: %s time: %d\n`, time.Since(loadStart), loadedItemCount)
+	fmt.Printf("Data loaded: count: %d time: %s\n", loadedItemCount, time.Since(loadStart))
 
 	if loadedItemCount == 0 {
 		return 0, nil
@@ -37,7 +37,7 @@ func (srv *Service) LoadNews(limit int, page int, repo *repository.Repository) (
 	if err := repo.SetNews(newsDB); err != nil {
 		return 0, err
 	}
-	fmt.Printf(`Data saved: time: %s\n`, time.Since(startSaveTime))
+	fmt.Printf("Data saved: time: %s\n", time.Since(startSaveTime))
 	return loadedItemCount, nil
 }
 func ConvertNews(newsAPI []*models.NewsAPI) ([]*models.NewsDB, error) {
