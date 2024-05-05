@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/abwhop/portal_sync"
 	"io"
 	"net/http"
@@ -59,10 +60,12 @@ func (g *Gql) Query(ctx context.Context, query string, model interface{}) error 
 	var errorRespond ErrorRespond
 
 	b, err := io.ReadAll(resp.Body)
-	//fmt.Println(string(b))
+	fmt.Println(string(b))
 	if err := json.Unmarshal(b, &errorRespond); err == nil {
+		fmt.Println("1")
 		return errors.New(errorRespond.Error.Message)
 	} else if err := json.Unmarshal(b, &errorRespondGQL); err == nil && len(errorRespondGQL.Errors) > 0 {
+		fmt.Println("2")
 		return errors.New(errorRespondGQL.Errors[0].Message)
 	} else if err := json.Unmarshal(b, &model); err != nil {
 		return err
