@@ -267,7 +267,7 @@ func convertComment(commentAPI *models.CommentAPI) (*models.CommentDB, error) {
 	return &models.CommentDB{
 		Id:          commentAPI.Id,
 		Text:        commentAPI.Text,
-		DateCreated: commentAPI.DateCreated * 1000,
+		DateCreated: commentAPI.DateCreate * 1000,
 		Author:      authorDB,
 	}, nil
 }
