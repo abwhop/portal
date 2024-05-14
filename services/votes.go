@@ -15,13 +15,18 @@ func (srv *Service) LoadVotes(limit int, page int) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second)
 	defer cancel()
 	var err error
-	loafStart := time.Now()
+	loadStart := time.Now()
 	var respondModel models.ViteGQLRespond
 	if err := gql.NewGql(srv.config.Portal).Query(ctx, fmt.Sprintf(query.VotesQuery, limit, page), &respondModel); err != nil {
 		fmt.Println(err)
 		return 0, err
 	}
-	fmt.Println("Data loaded:", time.Since(loafStart))
+	loadedItemCount := len(respondModel.Data.Votes)
+	fmt.Printf("Data loaded: count: %d time: %s\n", loadedItemCount, time.Since(loadStart))
+
+	if loadedItemCount == 0 {
+		return 0, nil
+	}
 	startSaveTime := time.Now()
 
 	itemsDB, err := convertVotes(respondModel.Data.Votes)

@@ -14,7 +14,7 @@ import (
 func (srv *Service) LoadAllForms() (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second)
 	defer cancel()
-	loafStart := time.Now()
+	loadStart := time.Now()
 
 	var respondModel *models.FormGQLRespond
 
@@ -22,7 +22,14 @@ func (srv *Service) LoadAllForms() (int, error) {
 		fmt.Println(err)
 		return 0, err
 	}
-	fmt.Println("Data loaded:", time.Since(loafStart))
+
+	loadedItemCount := len(respondModel.Data.Forms)
+	fmt.Printf("Data loaded: count: %d time: %s\n", loadedItemCount, time.Since(loadStart))
+
+	if loadedItemCount == 0 {
+		return 0, nil
+	}
+
 	startSaveTime := time.Now()
 
 	itemsDB, err := convertForms(respondModel.Data.Forms)

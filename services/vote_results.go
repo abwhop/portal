@@ -14,7 +14,7 @@ func (srv *Service) LoadVoteResults(limit int, page int) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second)
 	defer cancel()
 	var err error
-	loafStart := time.Now()
+	loadStart := time.Now()
 
 	var respondModel models.ViteResultGQLRespond
 
@@ -22,7 +22,12 @@ func (srv *Service) LoadVoteResults(limit int, page int) (int, error) {
 		fmt.Println(err)
 		return 0, err
 	}
-	fmt.Println("Data loaded:", time.Since(loafStart))
+	loadedItemCount := len(respondModel.Data.VoteResults)
+	fmt.Printf("Data loaded: count: %d time: %s\n", loadedItemCount, time.Since(loadStart))
+
+	if loadedItemCount == 0 {
+		return 0, nil
+	}
 	startSaveTime := time.Now()
 
 	itemsDB, err := convertVoteResults(respondModel.Data.VoteResults)
