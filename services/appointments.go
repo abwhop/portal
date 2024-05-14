@@ -14,16 +14,20 @@ func (srv *Service) LoadAppointments(limit int, page int) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second)
 	defer cancel()
 	var err error
-	loafStart := time.Now()
+	loadStart := time.Now()
 	var respondModel *models.AppointmentsGQLRespond
 
 	if err := gql.NewGql(srv.config.Portal).Query(ctx, fmt.Sprintf(query.AppointmentsQuery, limit, page), &respondModel); err != nil {
 		fmt.Println(err)
 		return 0, err
 	}
-	fmt.Println("Data loaded:", time.Since(loafStart))
-	startSaveTime := time.Now()
+	loadedItemCount := len(respondModel.Data.Appointments)
+	fmt.Printf("Data loaded: count: %d time: %s\n", loadedItemCount, time.Since(loadStart))
 
+	if loadedItemCount == 0 {
+		return 0, nil
+	}
+	startSaveTime := time.Now()
 	appointments, err := convertAppointments(respondModel.Data.Appointments)
 	if err != nil {
 		return 0, err
