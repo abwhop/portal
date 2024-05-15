@@ -123,7 +123,7 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsDB, error) {
 	}, nil
 }
 func changeType(arr []int) []int64 {
-	var arr2 []int64
+	arr2 := make([]int64, len(arr))
 	for i := 0; i < len(arr); i++ {
 		arr2[i] = int64(arr[i])
 	}
