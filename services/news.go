@@ -7,7 +7,6 @@ import (
 	"github.com/abwhop/portal_sync/gql"
 	"github.com/abwhop/portal_sync/query"
 	"github.com/abwhop/portal_sync/repository"
-	"github.com/lib/pq"
 	"time"
 )
 
@@ -118,12 +117,18 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsDB, error) {
 		ReposBlogPostId: repostBlogPostId,
 		Comments:        commentsDB,
 		Files:           filesDB,
-		VoteNum:         pq.Int64Array{},
+		VoteIds:         changeType(newsAPI.VoteNum),
 		FormId:          formIds,
 		Tags:            tags,
 	}, nil
 }
-
+func changeType(arr []int) []int64 {
+	var arr2 []int64
+	for i := 0; i < len(arr); i++ {
+		arr2[i] = int64(arr[i])
+	}
+	return arr2
+}
 func convertNewsTags(tags []*models.Tag) ([]string, error) {
 	var tagsDB []string
 	for _, tag := range tags {
