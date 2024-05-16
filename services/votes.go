@@ -87,9 +87,17 @@ func convertVote(itemAPI *models.VoteAPI) (*models.VoteDB, error) {
 	}, nil
 }
 
-func convertQuestions(itemAPI []*models.QuestionAPI) (*models.ListOfQuestionDB, error) {
+func convertQuestions(itemsAPI []*models.QuestionAPI) (*models.ListOfQuestionDB, error) {
+	var itemsDB []*models.QuestionDB
 	var list *models.ListOfQuestionDB
-	marshal, err := json.Marshal(itemAPI)
+	for _, item := range itemsAPI {
+		itemDB, err := convertQuestion(item)
+		if err != nil {
+			continue
+		}
+		itemsDB = append(itemsDB, itemDB)
+	}
+	marshal, err := json.Marshal(itemsDB)
 	if err != nil {
 		return nil, err
 	}
@@ -97,8 +105,60 @@ func convertQuestions(itemAPI []*models.QuestionAPI) (*models.ListOfQuestionDB, 
 	if err := json.Unmarshal(marshal, &list); err != nil {
 		return nil, err
 	}
+	return list, nil
+}
 
-	return list, err
+func convertQuestion(itemAPI *models.QuestionAPI) (*models.QuestionDB, error) {
+	answerDB, err := convertAnswers(itemAPI.Answers)
+	if err != nil {
+		answerDB = nil
+	}
+	return &models.QuestionDB{
+		Id:           itemAPI.Id,
+		Sort:         itemAPI.Sort,
+		Question:     itemAPI.Question,
+		DateChange:   itemAPI.DateChange * 1000,
+		Active:       itemAPI.Active,
+		Counter:      itemAPI.Counter,
+		Diagram:      itemAPI.Diagram,
+		Required:     itemAPI.Required,
+		DiagramType:  itemAPI.DiagramType,
+		QuestionType: itemAPI.QuestionType,
+		Answers:      answerDB,
+	}, nil
+}
+
+func convertAnswers(itemsAPI []*models.AnswerAPI) (*models.ListOfAnswerDB, error) {
+	var itemsDB []*models.AnswerDB
+	var list *models.ListOfAnswerDB
+	for _, item := range itemsAPI {
+		itemDB, err := convertAnswer(item)
+		if err != nil {
+			continue
+		}
+		itemsDB = append(itemsDB, itemDB)
+	}
+	marshal, err := json.Marshal(itemsDB)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(marshal, &list); err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func convertAnswer(itemAPI *models.AnswerAPI) (*models.AnswerDB, error) {
+	return &models.AnswerDB{
+		Id:         itemAPI.Id,
+		Sort:       itemAPI.Sort,
+		Message:    itemAPI.Message,
+		FieldType:  itemAPI.FieldType,
+		DateChange: itemAPI.DateChange * 1000,
+		Active:     itemAPI.Active,
+		Counter:    itemAPI.Counter,
+	}, nil
 }
 
 func convertVoteGroup(itemAPI *models.VoteGroupAPI) (*models.VoteGroupDB, error) {
