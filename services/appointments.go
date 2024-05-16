@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func (srv *Service) LoadAppointments(limit int, page int) (int, error) {
+func (srv *Service) LoadAppointments(limit int, page int, repo *repository.Repository) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second)
 	defer cancel()
 	var err error
@@ -33,7 +33,7 @@ func (srv *Service) LoadAppointments(limit int, page int) (int, error) {
 		return 0, err
 	}
 
-	if err := repository.NewRepository(srv.config.Database).SetAppointment(appointments); err != nil {
+	if err := repo.SetAppointment(appointments); err != nil {
 		return 0, err
 	}
 	fmt.Println("Data saved:", time.Since(startSaveTime))
