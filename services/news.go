@@ -186,7 +186,6 @@ func convertCalendarEvent(itemAPI *models.CalendarEventAPI) (*models.CalendarEve
 	}
 
 	return &models.CalendarEventDB{
-		Nested:      models.Nested{},
 		Id:          itemAPI.Id,
 		Title:       itemAPI.Title,
 		DateStart:   int64(dateStart),
