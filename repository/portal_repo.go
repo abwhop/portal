@@ -64,3 +64,7 @@ func (b *Repository) SetVotes(resModel []*models.VoteDB) error {
 func (b *Repository) SetVoteResults(resModel []*models.VoteResultDB) error {
 	return b.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(&resModel).Error
 }
+
+func (b *Repository) RefreshFeed() error {
+	return b.db.Exec(`refresh materialized view public.bitrix_feed;`).Error
+}
