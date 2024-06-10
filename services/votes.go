@@ -117,7 +117,7 @@ func convertQuestion(itemAPI *models.QuestionAPI) (*models.QuestionDB, error) {
 		Id:           itemAPI.Id,
 		Sort:         itemAPI.Sort,
 		Question:     itemAPI.Question,
-		DateChange:   itemAPI.DateChange * 1000,
+		DateChange:   itemAPI.DateChange,
 		Active:       itemAPI.Active,
 		Counter:      itemAPI.Counter,
 		Diagram:      itemAPI.Diagram,
@@ -155,7 +155,7 @@ func convertAnswer(itemAPI *models.AnswerAPI) (*models.AnswerDB, error) {
 		Sort:       itemAPI.Sort,
 		Message:    itemAPI.Message,
 		FieldType:  itemAPI.FieldType,
-		DateChange: itemAPI.DateChange * 1000,
+		DateChange: itemAPI.DateChange,
 		Active:     itemAPI.Active,
 		Counter:    itemAPI.Counter,
 	}, nil
