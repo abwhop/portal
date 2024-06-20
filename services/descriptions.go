@@ -14,7 +14,24 @@ func ConvertDescriptions(text string) (pq.Int64Array, string, *models.ListOfDesc
 	var descriptions []*models.DescriptionDB
 	var list *models.ListOfDescriptionDB
 
-	doc, err := htmlquery.Parse(strings.NewReader(text))
+	text = strings.ReplaceAll(text, "<img", "9bb92469479a4edbab8ea4fbb9e00e73 <img")
+	text = strings.ReplaceAll(text, "/>", "/> 9bb92469479a4edbab8ea4fbb9e00e73")
+	text = strings.ReplaceAll(text, "<video", "9bb92469479a4edbab8ea4fbb9e00e73 <video")
+	text = strings.ReplaceAll(text, "</video>", "</video> 9bb92469479a4edbab8ea4fbb9e00e73")
+	text = strings.ReplaceAll(text, "<file", "9bb92469479a4edbab8ea4fbb9e00e73 <file")
+	text = strings.ReplaceAll(text, "</file>", "</file> 9bb92469479a4edbab8ea4fbb9e00e73")
+	text = regexp.MustCompile(`\$vote_\d+`).ReplaceAllString(text, "9bb92469479a4edbab8ea4fbb9e00e73 ${0} 9bb92469479a4edbab8ea4fbb9e00e73")
+	text = regexp.MustCompile(`#FORM_ID_\d+`).ReplaceAllString(text, "9bb92469479a4edbab8ea4fbb9e00e73 ${0} 9bb92469479a4edbab8ea4fbb9e00e73")
+	newsBody := strings.Split(text, "9bb92469479a4edbab8ea4fbb9e00e73")
+	for _, body := range newsBody {
+		str := strings.TrimSpace(strings.Trim(body, "\n"))
+		if str == "" || str == "<br />" {
+			continue
+		}
+		descriptions = append(descriptions, parser(str))
+
+	}
+	/*doc, err := htmlquery.Parse(strings.NewReader(text))
 	if err != nil {
 		return pq.Int64Array{}, text, nil, err
 	}
@@ -56,20 +73,20 @@ func ConvertDescriptions(text string) (pq.Int64Array, string, *models.ListOfDesc
 			Type: "vote",
 			Id:   n,
 		})
-	}
+	}*/
 	text, formIds := getTags(text, `\#FORM_ID_\d+\#`)
 	var forms pq.Int64Array
 	for _, n := range formIds {
-		descriptions = append(descriptions, &models.DescriptionDB{
+		/*descriptions = append(descriptions, &models.DescriptionDB{
 			Type: "form",
 			Id:   n,
-		})
+		})*/
 		forms = append(forms, int64(n))
 	}
-	descriptions = append(descriptions, &models.DescriptionDB{
+	/*descriptions = append(descriptions, &models.DescriptionDB{
 		Type: "text",
 		Html: text,
-	})
+	})*/
 	marshal, err := json.Marshal(descriptions)
 	if err != nil {
 		return pq.Int64Array{}, text, nil, err
@@ -80,7 +97,79 @@ func ConvertDescriptions(text string) (pq.Int64Array, string, *models.ListOfDesc
 	}
 	return forms, text, list, nil
 }
+func parser(content string) *models.DescriptionDB {
 
+	doc, err := htmlquery.Parse(strings.NewReader(content))
+	if err != nil {
+		return nil
+	}
+	if n := htmlquery.FindOne(doc, `//img`); n != nil {
+		height, err := strconv.Atoi(htmlquery.SelectAttr(n, "height"))
+		if err != nil {
+			height = 0
+		}
+		width, err := strconv.Atoi(htmlquery.SelectAttr(n, "width"))
+		if err != nil {
+			width = 0
+		}
+
+		if height > 16 && width > 16 {
+			return &models.DescriptionDB{
+				Type:   "img",
+				Src:    htmlquery.SelectAttr(n, "src"),
+				Title:  htmlquery.SelectAttr(n, "title"),
+				Height: height,
+				Width:  width,
+			}
+		}
+	}
+
+	if n := htmlquery.FindOne(doc, `//video`); n != nil {
+		return &models.DescriptionDB{
+			Type:     "video",
+			Src:      htmlquery.SelectAttr(n, "src"),
+			TypeFile: htmlquery.SelectAttr(n, "type"),
+		}
+	}
+
+	if match, err := regexp.MatchString(`\$vote_\d+`, content); err != nil {
+		return nil
+	} else if match {
+		first := regexp.MustCompile(`\d+`).FindStringSubmatch(content)
+		if len(first) < 1 {
+			return nil
+		}
+		id, err := strconv.Atoi(first[0])
+		if err != nil {
+			return nil
+		}
+		return &models.DescriptionDB{
+			Type: "vote",
+			Id:   id,
+		}
+	}
+	if match, err := regexp.MatchString(`#FORM_ID_\d+`, content); err != nil {
+		return nil
+	} else if match {
+		first := regexp.MustCompile(`\d+`).FindStringSubmatch(content)
+		if len(first) < 1 {
+			return nil
+		}
+		id, err := strconv.Atoi(first[0])
+		if err != nil {
+			return nil
+		}
+		return &models.DescriptionDB{
+			Type: "form",
+			Id:   id,
+		}
+	}
+
+	return &models.DescriptionDB{
+		Type: "text",
+		Html: content,
+	}
+}
 func getTags(text string, mask string) (string, []int) {
 	var items []int
 	re, _ := regexp.Compile(mask)
