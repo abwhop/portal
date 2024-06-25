@@ -77,7 +77,7 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsDB, error) {
 	if err != nil {
 		commentsDB = nil
 	}
-	formIds, convertedText, descriptionsDB, err := ConvertDescriptions(newsAPI.Text)
+	formIds, _, descriptionsDB, err := ConvertDescriptions(newsAPI.Text)
 	if err != nil {
 		descriptionsDB = nil
 	}
@@ -106,7 +106,7 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsDB, error) {
 		LogId:              newsAPI.LogId,
 		CanComment:         newsAPI.CanComment,
 		Descriptions:       descriptionsDB,
-		Description:        convertedText,
+		Description:        newsAPI.Text,
 		Published:          newsAPI.Published,
 		Rights:             newsAPI.Rights,
 		ImageUrl:           newsAPI.Img,
