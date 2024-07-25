@@ -137,7 +137,7 @@ func ConvertBlog(blogsAPI *models.BlogAPI) (*models.BlogDB, error) {
 		subscribersDB = nil
 	}
 	return &models.BlogDB{
-		BitrixId:         blogsAPI.Id,
+		Id:               blogsAPI.Id,
 		Name:             blogsAPI.Name,
 		Description:      blogsAPI.Description,
 		DateCreated:      blogsAPI.DateCreate,
