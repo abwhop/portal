@@ -75,7 +75,7 @@ func ConvertBlogPost(postAPI *models.PostAPI) (*models.PostDB, error) {
 	if err != nil {
 		commentsDB = nil
 	}
-	formIds, convertedText, descriptionsDB, err := ConvertDescriptions(postAPI.Text)
+	formIds, _, descriptionsDB, err := ConvertDescriptions(postAPI.Text)
 	if err != nil {
 		descriptionsDB = nil
 	}
@@ -92,7 +92,7 @@ func ConvertBlogPost(postAPI *models.PostAPI) (*models.PostDB, error) {
 
 	return &models.PostDB{
 		Id:               postAPI.Id,
-		Text:             convertedText,
+		Text:             postAPI.Text,
 		Title:            postAPI.Title,
 		CreatedDate:      postAPI.CreateDate * 1000,
 		PublishDate:      postAPI.PublishDate * 1000,
