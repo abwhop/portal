@@ -20,7 +20,7 @@ func ConvertDescriptions(text string) (pq.Int64Array, string, *models.ListOfDesc
 	text = strings.ReplaceAll(text, "</video>", "</video> 9bb92469479a4edbab8ea4fbb9e00e73")
 	text = strings.ReplaceAll(text, "<file", "9bb92469479a4edbab8ea4fbb9e00e73 <file")
 	text = strings.ReplaceAll(text, "</file>", "</file> 9bb92469479a4edbab8ea4fbb9e00e73")
-	text = regexp.MustCompile(`\$vote_\d+`).ReplaceAllString(text, "9bb92469479a4edbab8ea4fbb9e00e73 ${0} 9bb92469479a4edbab8ea4fbb9e00e73")
+	text = regexp.MustCompile(`\$vote_\d+\$`).ReplaceAllString(text, "9bb92469479a4edbab8ea4fbb9e00e73 ${0} 9bb92469479a4edbab8ea4fbb9e00e73")
 	text = regexp.MustCompile(`#FORM_ID_\d+`).ReplaceAllString(text, "9bb92469479a4edbab8ea4fbb9e00e73 ${0} 9bb92469479a4edbab8ea4fbb9e00e73")
 	newsBody := strings.Split(text, "9bb92469479a4edbab8ea4fbb9e00e73")
 	for _, body := range newsBody {
@@ -132,7 +132,7 @@ func parser(content string) *models.DescriptionDB {
 		}
 	}
 
-	if match, err := regexp.MatchString(`\$vote_\d+`, content); err != nil {
+	if match, err := regexp.MatchString(`\$vote_\d+\$`, content); err != nil {
 		return nil
 	} else if match {
 		first := regexp.MustCompile(`\d+`).FindStringSubmatch(content)
