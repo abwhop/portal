@@ -67,6 +67,11 @@ func convertAppointment(newsAPI *models.AppointmentsAPI) (*models.AppointmentsDB
 		filesDB = nil
 	}
 
+	firstCommentDB, err := ConvertComment(newsAPI.FirstComment)
+	if err != nil {
+		firstCommentDB = nil
+	}
+
 	viewsDB, err := ConvertViews(newsAPI.Views)
 	if err != nil {
 		viewsDB = nil
@@ -102,10 +107,11 @@ func convertAppointment(newsAPI *models.AppointmentsAPI) (*models.AppointmentsDB
 			Id:   newsAPI.Rubric.Id,
 			Code: newsAPI.Rubric.Code,
 		},
-		Author:   authorDB,
-		Likes:    likesDB,
-		Views:    viewsDB,
-		Comments: commentsDB,
-		Files:    filesDB,
+		FirstComment: firstCommentDB,
+		Author:       authorDB,
+		Likes:        likesDB,
+		Views:        viewsDB,
+		Comments:     commentsDB,
+		Files:        filesDB,
 	}, nil
 }

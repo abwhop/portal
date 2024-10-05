@@ -7,6 +7,7 @@ import (
 
 func ConvertComment(commentAPI *models.CommentAPI) (*models.CommentDB, error) {
 	authorDB, err := ConvertUser(commentAPI.Author)
+	likesDB, err := ConvertLikes(commentAPI.Likes)
 	if err != nil {
 		authorDB = nil
 	}
@@ -14,6 +15,7 @@ func ConvertComment(commentAPI *models.CommentAPI) (*models.CommentDB, error) {
 		Id:          commentAPI.Id,
 		Text:        commentAPI.Text,
 		DateCreated: commentAPI.DateCreate * 1000,
+		Likes:       likesDB,
 		Author:      authorDB,
 	}, nil
 }
