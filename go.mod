@@ -3,7 +3,7 @@ module github.com/abwhop/portal_sync
 go 1.21.2
 
 require (
-	github.com/abwhop/portal_models v1.1.39
+	github.com/abwhop/portal_models v1.1.41
 	github.com/antchfx/htmlquery v1.3.1
 	github.com/lib/pq v1.10.9
 	gorm.io/driver/postgres v1.5.7

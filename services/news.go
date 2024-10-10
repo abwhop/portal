@@ -48,6 +48,18 @@ func ConvertNews(newsAPI []*models.NewsAPI) ([]*models.NewsDB, error) {
 		if err != nil {
 			continue
 		}
+		if len(news.Comments) > 0 {
+			var freshestComment *models.CommentAPI
+			for _, comment := range news.Comments {
+				if freshestComment == nil || comment.DateCreate > freshestComment.DateCreate {
+					freshestComment = comment
+				}
+			}
+			newsOneDB.FirstComment, err = convertComment(freshestComment)
+			if err != nil {
+				continue
+			}
+		}
 		newsDB = append(newsDB, newsOneDB)
 	}
 	return newsDB, nil
@@ -65,7 +77,11 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsDB, error) {
 	}
 	likesDB, err := ConvertLikes(newsAPI.Likes)
 	if err != nil {
-		filesDB = nil
+		likesDB = nil
+	}
+	firstCommentDB, err := ConvertComment(newsAPI.FirstComment)
+	if err != nil {
+		firstCommentDB = nil
 	}
 
 	viewsDB, err := ConvertViews(newsAPI.Views)
@@ -118,6 +134,7 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsDB, error) {
 			Id:   newsAPI.Rubric.Id,
 			Code: newsAPI.Rubric.Code,
 		},
+		FirstComment:    firstCommentDB,
 		Author:          authorDB,
 		Likes:           likesDB,
 		Views:           viewsDB,

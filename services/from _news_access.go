@@ -261,13 +261,17 @@ func convertComments(commentsAPI []*models.CommentAPI) (int, *models.ListOfComme
 
 func convertComment(commentAPI *models.CommentAPI) (*models.CommentDB, error) {
 	authorDB, err := convertUser(commentAPI.Author)
+	likeDB, err := convertLikes(commentAPI.Likes)
 	if err != nil {
 		authorDB = nil
 	}
 	return &models.CommentDB{
-		Id:          commentAPI.Id,
-		Text:        commentAPI.Text,
-		DateCreated: commentAPI.DateCreate * 1000,
-		Author:      authorDB,
+		Id:             commentAPI.Id,
+		Text:           commentAPI.Text,
+		SourceId:       commentAPI.SourceId,
+		ParentSourceId: commentAPI.ParentSourceId,
+		DateCreated:    commentAPI.DateCreate * 1000,
+		Likes:          likeDB,
+		Author:         authorDB,
 	}, nil
 }
