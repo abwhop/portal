@@ -16,7 +16,6 @@ func (srv *Service) LoadAppointments(limit int, page int, repo *repository.Repos
 	var err error
 	loadStart := time.Now()
 	var respondModel *models.AppointmentsGQLRespond
-
 	if err := gql.NewGql(srv.config.Portal).Query(ctx, fmt.Sprintf(query.AppointmentsQuery, limit, page), &respondModel); err != nil {
 		fmt.Println(err)
 		return 0, err
@@ -32,12 +31,11 @@ func (srv *Service) LoadAppointments(limit int, page int, repo *repository.Repos
 	if err != nil {
 		return 0, err
 	}
-
 	if err := repo.SetAppointment(appointments); err != nil {
 		return 0, err
 	}
 	fmt.Println("Data saved:", time.Since(startSaveTime))
-	return len(respondModel.Data.Appointments), nil
+	return loadedItemCount, nil
 }
 
 func convertAppointments(newsAPI []*models.AppointmentsAPI) ([]*models.AppointmentsDB, error) {
@@ -46,6 +44,18 @@ func convertAppointments(newsAPI []*models.AppointmentsAPI) ([]*models.Appointme
 		itemDB, err := convertAppointment(item)
 		if err != nil {
 			continue
+		}
+		if len(item.Comments) > 0 {
+			var freshestComment *models.CommentAPI
+			for _, comment := range item.Comments {
+				if freshestComment == nil || comment.DateCreate > freshestComment.DateCreate {
+					freshestComment = comment
+				}
+			}
+			itemDB.FirstComment, err = convertComment(freshestComment)
+			if err != nil {
+				continue
+			}
 		}
 		items = append(items, itemDB)
 	}
@@ -67,16 +77,17 @@ func convertAppointment(newsAPI *models.AppointmentsAPI) (*models.AppointmentsDB
 		filesDB = nil
 	}
 
-	firstCommentDB, err := ConvertComment(newsAPI.FirstComment)
-	if err != nil {
-		firstCommentDB = nil
+	var firstCommentDB *models.CommentDB
+	if newsAPI.FirstComment != nil {
+		firstCommentDB, err = ConvertComment(newsAPI.FirstComment)
+		if err != nil {
+			firstCommentDB = nil
+		}
 	}
-
 	viewsDB, err := ConvertViews(newsAPI.Views)
 	if err != nil {
 		viewsDB = nil
 	}
-
 	_, commentsDB, err := ConvertComments(newsAPI.Comments)
 	if err != nil {
 		commentsDB = nil
