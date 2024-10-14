@@ -26,6 +26,9 @@ func ConvertComments(commentsAPI []*models.CommentAPI) (int, *models.ListOfComme
 	var commentsDb []*models.CommentDB
 	var list *models.ListOfCommentDB
 	for _, commentAPI := range commentsAPI {
+		if commentAPI.Likes == nil {
+			commentAPI.Likes = new(models.LikesAPI)
+		}
 		commentDb, err := ConvertComment(commentAPI)
 		if err != nil {
 			continue

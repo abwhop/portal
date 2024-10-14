@@ -79,16 +79,18 @@ func ConvertOneNews(newsAPI *models.NewsAPI) (*models.NewsDB, error) {
 	if err != nil {
 		likesDB = nil
 	}
-	firstCommentDB, err := ConvertComment(newsAPI.FirstComment)
-	if err != nil {
-		firstCommentDB = nil
-	}
 
+	var firstCommentDB *models.CommentDB
+	if newsAPI.FirstComment != nil {
+		firstCommentDB, err = ConvertComment(newsAPI.FirstComment)
+		if err != nil {
+			firstCommentDB = nil
+		}
+	}
 	viewsDB, err := ConvertViews(newsAPI.Views)
 	if err != nil {
 		viewsDB = nil
 	}
-
 	_, commentsDB, err := ConvertComments(newsAPI.Comments)
 	if err != nil {
 		commentsDB = nil
